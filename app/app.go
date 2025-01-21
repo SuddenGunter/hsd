@@ -32,11 +32,15 @@ func New(l *slog.Logger, cfg *config.Config) *App {
 
 // Run starts the app and blocks until shutdown.
 func (app *App) Run(sigCtx context.Context) {
-	notifier := telegram.NewNotifier(app.cfg.TelegramBotToken, app.l)
+	notifier, err := telegram.NewNotifier(app.cfg.TelegramBotToken, app.cfg.TelegramChatID, app.l)
+	if err != nil {
+		app.l.Error("failed to create telegram notifier", "err", err)
+		return
+	}
+
 	alarmer := alarm.New(notifier, app.l)
 	devMsg := alarm.NewDeviceMessenger(app.cfg.Z2MDevices, alarmer, app.l)
 	devMsg.Listen()
-	go notifier.Listen()
 	defer devMsg.Close()
 
 	gh := alarmgethandler.NewGetHandler(app.l, alarmer)

@@ -28,3 +28,4 @@ go.work.sum
 appx
 
 .vscode
+Taskfile.yaml

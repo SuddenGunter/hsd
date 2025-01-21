@@ -38,6 +38,7 @@ func NewDevice(name string, alarmer alarmer, l *slog.Logger) *Device {
 		alarmer: alarmer,
 		// we assume it's available unless we hear otherwise
 		available:   true,
+		opened:      false,
 		stateUpdate: make(chan stateUpdateMsg),
 		close:       make(chan struct{}),
 		l:           l,

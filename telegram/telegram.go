@@ -1,7 +1,7 @@
 package telegram
 
 import (
-	"log"
+	"fmt"
 	"log/slog"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
@@ -9,45 +9,35 @@ import (
 
 // Notifier sends messages to a telegram chat.
 type Notifier struct {
-	tgBotToken string
-	l          *slog.Logger
+	chatID int64
+	bot    *tgbotapi.BotAPI
+
+	l *slog.Logger
 }
 
 // NewNotifier returns a new Notifier.
-func NewNotifier(tgBotToken string, l *slog.Logger) *Notifier {
-	return &Notifier{tgBotToken: tgBotToken, l: l}
-}
-
-// Notify sends a message to specific telegram chat about the alarm event.
-func (n *Notifier) Notify(device, msg string) {
-	n.l.Info("telegram message sent", "device", device, "msg", msg)
-}
-
-func (n *Notifier) Listen() {
-	bot, err := tgbotapi.NewBotAPI(n.tgBotToken)
+func NewNotifier(tgBotToken string, chatID int64, l *slog.Logger) (*Notifier, error) {
+	bot, err := tgbotapi.NewBotAPI(tgBotToken)
 	if err != nil {
-		log.Panic(err)
+		return nil, fmt.Errorf("new notifier: %w", err)
 	}
 
-	bot.Debug = true
+	return &Notifier{chatID: chatID, bot: bot, l: l}, nil
+}
 
-	log.Printf("Authorized on account %s", bot.Self.UserName)
+// // Notify sends a message to specific telegram chat about the alarm event.
+// func (n *Notifier) Notify(device, msg string) {
+// 	payload := fmt.Sprintf("🚨 %s: %s", device, msg)
+// 	tgMsg := tgbotapi.NewMessage(n.chatID, payload)
+// 	tgMsg.ParseMode = tgbotapi.ModeMarkdownV2
 
-	u := tgbotapi.NewUpdate(0)
-	u.Timeout = 60
+// 	_, err := n.bot.Send(tgMsg)
+// 	if err != nil {
+// 		n.l.Error("telegram message delivery failed", "err", err)
+// 		return
+// 	}
+// }
 
-	updates := bot.GetUpdatesChan(u)
-
-	go func() {
-		for update := range updates {
-			if update.Message != nil { // If we got a message
-				n.l.Debug("telegram message received", "user", update.Message.From.UserName, "msg", update.Message.Text)
-			}
-		}
-	}()
-
-	// msg := tgbotapi.NewMessage(update.Message.Chat.ID, update.Message.Text)
-	// msg.ReplyToMessageID = update.Message.MessageID
-
-	// bot.Send(msg)
+func (n *Notifier) Notify(device, msg string) {
+	n.l.Info("telegram message delivery", "device", device, "msg", msg)
 }

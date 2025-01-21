@@ -18,6 +18,7 @@ type Config struct {
 	Z2MDevices []string `env:"Z2M_DEVICES"`
 
 	TelegramBotToken string `env:"TELEGRAM_BOT_TOKEN,required"`
+	TelegramChatID   int64  `env:"TELEGRAM_CHAT_ID,required"`
 }
 
 // LoadEnv loads the configuration from the environment.
