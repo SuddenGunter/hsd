@@ -1,0 +1,14 @@
+version: "3"
+
+tasks:
+  run:
+    cmds:
+      - echo 'TODO revoke gunter/mqtt account'
+    env:
+      PORT: 8080
+      MQTT_USERNAME: ""
+      MQTT_PASSWORD: ""
+      MQTT_BROKER_IP: ""
+      MQTT_PORT: 1883
+      Z2M_DEVICES: "Balcony"
+      TELEGRAM_BOT_TOKEN: ""

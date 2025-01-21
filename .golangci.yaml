@@ -1,0 +1,65 @@
+linters-settings:
+  gocognit:
+    min-complexity: 15
+  gocyclo:
+    min-complexity: 15
+  gofumpt:
+    extra-rules: true
+  lll:
+    line-length: 150
+    tab-width: 1
+  misspell:
+    locale: "UK"
+  nestif:
+    min-complexity: 4
+  wsl:
+    allow-cuddle-declarations: false
+    force-err-cuddling: true
+  nolintlint:
+    require-explanation: true
+    require-specific: true
+
+linters:
+  disable-all: true
+  enable:
+    - copyloopvar
+    - dogsled
+    - dupl
+    - errcheck
+    - gochecknoinits
+    - gocognit
+    - gocritic
+    - gocyclo
+    - godot
+    - gofumpt
+    - gosec
+    - gosimple
+    - govet
+    - ineffassign
+    - lll
+    - misspell
+    - nakedret
+    - nestif
+    - noctx
+    - prealloc
+    - revive
+    - staticcheck
+    - stylecheck
+    - testpackage
+    - unconvert
+    - unparam
+    - unused
+    - wrapcheck
+    - wsl
+    - nolintlint
+issues:
+  include:
+    # Disable excluding of issues about comments from revive.
+    - EXC0012
+    # ineffective break statement. Did you mean to break out of the outer loop? (staticcheck)
+    - EXC0005
+  exclude-rules:
+    # Exclude issues for long lines with go:generate
+    - linters:
+        - lll
+      source: "^//go:generate "

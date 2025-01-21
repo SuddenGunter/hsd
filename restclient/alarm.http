@@ -1,0 +1,15 @@
+# Test HTTP requests using VS-Code REST Client extension. May work with other IDEs (not tested).
+
+###
+
+GET http://localhost:8080/alarm
+
+###
+
+POST http://localhost:8080/alarm
+content-type: application/json
+
+{
+  "enabled": true
+}
+
