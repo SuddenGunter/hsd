@@ -34,11 +34,7 @@ func (h *DataHandler) Handle(ctx context.Context, msg z2m.Msg) {
 	}
 
 	// contact is true when the door is closed
-	if sensorMsg.Contact {
-		h.deviceNotifier.SetOpened(ctx, msg.Device, false)
-	} else {
-		h.deviceNotifier.SetOpened(ctx, msg.Device, true)
-	}
+	h.deviceNotifier.SetOpened(ctx, msg.Device, !sensorMsg.Contact)
 }
 
 type doorSensorMsg struct {

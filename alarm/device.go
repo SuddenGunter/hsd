@@ -2,6 +2,7 @@ package alarm
 
 import (
 	"context"
+	"fmt"
 	"log/slog"
 	"time"
 )
@@ -62,6 +63,7 @@ func (d *Device) SetAvailability(ctx context.Context, available bool) {
 func (d *Device) SetOpened(ctx context.Context, opened bool) {
 	select {
 	case <-ctx.Done():
+		// TODO: figure out where are the duplicates coming from
 		d.l.Error("device state update timeout", "device", d.name, "operation", "SetOpened", "reason", ctx.Err())
 		return
 	case d.stateUpdate <- stateUpdateMsg{opened: &opened}:
@@ -78,6 +80,7 @@ func (d *Device) loop() {
 			return
 
 		case msg := <-d.stateUpdate:
+			d.l.Info("device state update received", "device", d.name, "availability", ptr(msg.availability), "opened", ptr(msg.opened))
 			if msg.availability != nil {
 				d.available = *msg.availability
 			}
@@ -108,4 +111,12 @@ func (d *Device) evalAlarm() {
 		d.alarmer.Alarm(d.name, "no messages received for a long time")
 		return
 	}
+}
+
+func ptr(b *bool) string {
+	if b == nil {
+		return "nil"
+	}
+
+	return fmt.Sprintf("%v", *b)
 }
