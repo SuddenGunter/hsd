@@ -1,14 +1,21 @@
 version: "3"
 
+# env for docker-compose.yaml
+env:
+  PORT: 8080
+  MQTT_USERNAME: "hsd"
+  MQTT_BROKER_IP: "localhost"
+  MQTT_PORT: 1883
+  Z2M_DEVICES: "door1"
+  MQTT_PASSWORD: "hsd"
+  # TELEGRAM_BOT_TOKEN: "" # will be loaded from hsd.env
+  # TELEGRAM_CHAT_ID: "" # will be loaded from hsd.env\
+
+dotenv: ["hsd.env"]
+
 tasks:
   run:
     cmds:
-      - echo 'TODO revoke gunter/mqtt account'
-    env:
-      PORT: 8080
-      MQTT_USERNAME: ""
-      MQTT_PASSWORD: ""
-      MQTT_BROKER_IP: ""
-      MQTT_PORT: 1883
-      Z2M_DEVICES: "Balcony"
-      TELEGRAM_BOT_TOKEN: ""
+      - go build -o ./appx
+      # verbose logging would no be ideal for prod deployment, but it's useful for local development
+      - ./appx -v

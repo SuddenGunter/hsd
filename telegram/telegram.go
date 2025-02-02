@@ -25,19 +25,15 @@ func NewNotifier(tgBotToken string, chatID int64, l *slog.Logger) (*Notifier, er
 	return &Notifier{chatID: chatID, bot: bot, l: l}, nil
 }
 
-// // Notify sends a message to specific telegram chat about the alarm event.
-// func (n *Notifier) Notify(device, msg string) {
-// 	payload := fmt.Sprintf("🚨 %s: %s", device, msg)
-// 	tgMsg := tgbotapi.NewMessage(n.chatID, payload)
-// 	tgMsg.ParseMode = tgbotapi.ModeMarkdownV2
-
-// 	_, err := n.bot.Send(tgMsg)
-// 	if err != nil {
-// 		n.l.Error("telegram message delivery failed", "err", err)
-// 		return
-// 	}
-// }
-
+// Notify sends a message to specific telegram chat about the alarm event.
 func (n *Notifier) Notify(device, msg string) {
-	n.l.Info("telegram message delivery", "device", device, "msg", msg)
+	payload := fmt.Sprintf("🚨 %s: %s", device, msg)
+	tgMsg := tgbotapi.NewMessage(n.chatID, payload)
+	tgMsg.ParseMode = tgbotapi.ModeMarkdownV2
+
+	_, err := n.bot.Send(tgMsg)
+	if err != nil {
+		n.l.Error("telegram message delivery failed", "err", err)
+		return
+	}
 }

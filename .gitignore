@@ -29,3 +29,5 @@ appx
 
 .vscode
 Taskfile.yaml
+hsd.env
+mqtt/mosquitto-data
