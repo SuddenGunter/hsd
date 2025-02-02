@@ -81,6 +81,7 @@ func (d *Device) loop() {
 
 		case msg := <-d.stateUpdate:
 			d.l.Info("device state update received", "device", d.name, "availability", ptr(msg.availability), "opened", ptr(msg.opened))
+
 			if msg.availability != nil {
 				d.available = *msg.availability
 			}
