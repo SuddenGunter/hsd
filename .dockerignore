@@ -1,0 +1,9 @@
+.git
+.github
+.idea
+.vscode
+appx
+mqtt
+.env
+Taskfile.yaml
+.golangci.yaml
