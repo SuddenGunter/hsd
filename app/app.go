@@ -40,6 +40,7 @@ func (app *App) Run(sigCtx context.Context) {
 
 	alarmer := alarm.New(notifier, app.l)
 	devMsg := alarm.NewDeviceMessenger(app.cfg.Z2MDevices, alarmer, app.l)
+
 	devMsg.Listen()
 	defer devMsg.Close()
 
