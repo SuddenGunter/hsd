@@ -9,3 +9,18 @@ services:
         command: 'mosquitto -c /mqttconf/custom.conf'
         ports:
           - 1883:1883
+    # Example hsd service
+    # hsd:
+    #     image: ghcr.io/suddengunter/hsd:v0.1.1
+    #     restart: unless-stopped
+    #     environment:
+    #         - PORT=8080
+    #         - MQTT_USERNAME=hsd
+    #         - MQTT_BROKER_IP=mqtt
+    #         - MQTT_PORT=1883
+    #         - Z2M_DEVICES=door1
+    #         - MQTT_PASSWORD=hsd
+    #         - TELEGRAM_BOT_TOKEN=
+    #         - TELEGRAM_CHAT_ID=
+    #     ports:
+    #       - 8080:8080
