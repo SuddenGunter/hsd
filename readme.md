@@ -49,4 +49,4 @@ Package into a docker image and ship to your server. Or use one of the tagged im
 
 - proper documentation
 - zigbee2mqtt button support to enable/disable alerts
-- CI to build docker images
+- zigbee2mqtt v2 support
