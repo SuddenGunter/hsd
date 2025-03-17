@@ -11,7 +11,7 @@ I only own Aqara Door and Window Sensor T1, so this is  the only supported senso
 
 ## Note on zigbee2mqtt version compitability
 
-Zigbee2mqtt 2.0 broke backward compitability, so, for now, only 1.x zigbee2mqtt branch is supported.
+Zigbee2MQTT 2.0 broke backward compitability for it's `*/availability` topics, but this app supports both v1 and v2 versions of messages.
 
 ## How to run locally (for development)
 
@@ -49,4 +49,3 @@ Package into a docker image and ship to your server. Or use one of the tagged im
 
 - proper documentation
 - zigbee2mqtt button support to enable/disable alerts
-- zigbee2mqtt v2 support
