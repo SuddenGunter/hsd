@@ -17,7 +17,7 @@ type DeviceMessenger struct {
 func NewDeviceMessenger(devices []string, alarmer alarmer, l *slog.Logger) *DeviceMessenger {
 	d := make(map[string]*Device)
 	for _, device := range devices {
-		d[device] = NewDevice(device, alarmer, l)
+		d[device] = NewDevice(device, newDebouncer(alarmer, l), l)
 	}
 
 	return &DeviceMessenger{devices: d, l: l}
