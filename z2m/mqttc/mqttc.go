@@ -10,7 +10,7 @@ import (
 
 // Connect to the MQTT broker.
 func Connect(cfg *config.Config) (mqtt.Client, error) {
-	broker := cfg.MQTTBrokerIP
+	broker := cfg.MQTTBrokerHost
 	port := cfg.MQTTBrokerPort
 	opts := mqtt.NewClientOptions()
 	opts.AddBroker(fmt.Sprintf("tcp://%s:%d", broker, port))
