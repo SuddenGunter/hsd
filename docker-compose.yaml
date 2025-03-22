@@ -16,7 +16,7 @@ services:
     #     environment:
     #         - PORT=8080
     #         - MQTT_USERNAME=hsd
-    #         - MQTT_BROKER_IP=mqtt
+    #         - MQTT_BROKER_HOST=mqtt
     #         - MQTT_PORT=1883
     #         - Z2M_DEVICES=door1
     #         - MQTT_PASSWORD=hsd

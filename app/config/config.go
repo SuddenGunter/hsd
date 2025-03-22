@@ -10,7 +10,7 @@ import (
 type Config struct {
 	Port int `env:"PORT,required"`
 
-	MQTTBrokerIP   string `env:"MQTT_BROKER_IP,required"`
+	MQTTBrokerHost string `env:"MQTT_BROKER_HOST,required"`
 	MQTTBrokerPort int    `env:"MQTT_BROKER_PORT" envDefault:"1883"`
 	MQTTUsername   string `env:"MQTT_USERNAME,required"`
 	MQTTPassword   string `env:"MQTT_PASSWORD,required"`
