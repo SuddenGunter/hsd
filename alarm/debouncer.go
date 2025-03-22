@@ -11,7 +11,7 @@ type Debouncer struct {
 	l    *slog.Logger
 
 	mux              *sync.Mutex
-	lastReceived     time.Time
+	last             time.Time
 	debounceInterval time.Duration
 }
 
@@ -37,8 +37,8 @@ func (d *Debouncer) allowSend() bool {
 	d.mux.Lock()
 	defer d.mux.Unlock()
 
-	if time.Since(d.lastReceived) >= d.debounceInterval {
-		d.lastReceived = time.Now()
+	if time.Since(d.last) >= d.debounceInterval {
+		d.last = time.Now()
 		return true
 	}
 
