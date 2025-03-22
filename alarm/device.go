@@ -63,7 +63,6 @@ func (d *Device) SetAvailability(ctx context.Context, available bool) {
 func (d *Device) SetOpened(ctx context.Context, opened bool) {
 	select {
 	case <-ctx.Done():
-		// TODO: figure out where are the duplicates coming from
 		d.l.Error("device state update timeout", "device", d.name, "operation", "SetOpened", "reason", ctx.Err())
 		return
 	case d.stateUpdate <- stateUpdateMsg{opened: &opened}:
