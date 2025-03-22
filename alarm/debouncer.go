@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-type Debouncer struct {
+type debouncer struct {
 	next alarmer
 	l    *slog.Logger
 
@@ -15,8 +15,8 @@ type Debouncer struct {
 	debounceInterval time.Duration
 }
 
-func NewDebouncer(next alarmer, l *slog.Logger) *Debouncer {
-	return &Debouncer{
+func newDebouncer(next alarmer, l *slog.Logger) *debouncer {
+	return &debouncer{
 		next:             next,
 		l:                l,
 		mux:              &sync.Mutex{},
@@ -24,7 +24,7 @@ func NewDebouncer(next alarmer, l *slog.Logger) *Debouncer {
 	}
 }
 
-func (d *Debouncer) Alarm(device, message string) {
+func (d *debouncer) Alarm(device, message string) {
 	if !d.allowSend() {
 		d.l.Info("alarm event received, but got debounced", "device", device)
 		return
@@ -33,7 +33,7 @@ func (d *Debouncer) Alarm(device, message string) {
 	d.next.Alarm(device, message)
 }
 
-func (d *Debouncer) allowSend() bool {
+func (d *debouncer) allowSend() bool {
 	d.mux.Lock()
 	defer d.mux.Unlock()
 
