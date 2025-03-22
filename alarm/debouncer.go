@@ -37,5 +37,10 @@ func (d *Debouncer) allowSend() bool {
 	d.mux.Lock()
 	defer d.mux.Unlock()
 
-	return time.Since(d.lastReceived) >= d.debounceInterval
+	if time.Since(d.lastReceived) >= d.debounceInterval {
+		d.lastReceived = time.Now()
+		return true
+	}
+
+	return false
 }
