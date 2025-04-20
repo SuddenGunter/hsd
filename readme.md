@@ -15,6 +15,14 @@ Zigbee2MQTT 2.0 broke backward compitability for it's `*/availability` topics, b
 
 ## How to run locally (for development)
 
+### Prerequisites
+
+1. You need a working Go environment with a version equal to or greater than the Go version mentioned in go.mod.
+2. You also need a working Docker/Podman in Docker emulation mode (basically something that can run docker-compose).
+3. The last thing is [go-task](https://github.com/go-task/task) to run commands from Taskfile.yaml.
+
+### Steps
+
 docker-compose.yaml and Taskfile.yaml already have most of the stuff you need to start the app, just add your Telegram information to either `hsd.env` file, or just into Taskfile.yaml.
 
 `hsd.env` file example:
