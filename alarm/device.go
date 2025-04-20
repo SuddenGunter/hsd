@@ -2,8 +2,8 @@ package alarm
 
 import (
 	"context"
-	"fmt"
 	"log/slog"
+	"strconv"
 	"time"
 )
 
@@ -118,5 +118,5 @@ func ptr(b *bool) string {
 		return "nil"
 	}
 
-	return fmt.Sprintf("%v", *b)
+	return strconv.FormatBool(*b)
 }
