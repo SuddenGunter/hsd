@@ -1,26 +1,19 @@
-linters-settings:
-  gocognit:
-    min-complexity: 15
-  gocyclo:
-    min-complexity: 15
-  gofumpt:
-    extra-rules: true
-  lll:
-    line-length: 150
-    tab-width: 1
-  misspell:
-    locale: "UK"
-  nestif:
-    min-complexity: 4
-  wsl:
-    allow-cuddle-declarations: false
-    force-err-cuddling: true
-  nolintlint:
-    require-explanation: true
-    require-specific: true
-
+version: "2"
 linters:
-  disable-all: true
+  default: all
+  disable:
+    - varnamelen
+    - tagalign
+    - nlreturn
+    - mnd
+    - gochecknoglobals
+    - funlen
+    - exhaustruct
+    - tagliatelle
+    - depguard
+    - contextcheck
+    - ireturn
+    - perfsprint
   enable:
     - copyloopvar
     - dogsled
@@ -31,9 +24,7 @@ linters:
     - gocritic
     - gocyclo
     - godot
-    - gofumpt
     - gosec
-    - gosimple
     - govet
     - ineffassign
     - lll
@@ -41,25 +32,48 @@ linters:
     - nakedret
     - nestif
     - noctx
+    - nolintlint
     - prealloc
     - revive
     - staticcheck
-    - stylecheck
     - testpackage
     - unconvert
     - unparam
     - unused
     - wrapcheck
     - wsl
-    - nolintlint
-issues:
-  include:
-    # Disable excluding of issues about comments from revive.
-    - EXC0012
-    # ineffective break statement. Did you mean to break out of the outer loop? (staticcheck)
-    - EXC0005
-  exclude-rules:
-    # Exclude issues for long lines with go:generate
-    - linters:
-        - lll
-      source: "^//go:generate "
+  settings:
+    gocognit:
+      min-complexity: 15
+    gocyclo:
+      min-complexity: 15
+    lll:
+      line-length: 150
+      tab-width: 1
+    misspell:
+      locale: UK
+    nestif:
+      min-complexity: 4
+    nolintlint:
+      require-explanation: true
+      require-specific: true
+    wsl:
+      allow-cuddle-declarations: false
+      force-err-cuddling: true
+    revive:
+      rules:
+        - name: package-comments
+          disabled: true
+  exclusions:
+    generated: lax
+    warn-unused: true
+    rules:
+      - linters:
+          - lll
+        source: '^//go:generate '
+formatters:
+  enable:
+    - gofumpt
+  settings:
+    gofumpt:
+      extra-rules: true
