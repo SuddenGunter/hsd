@@ -10,13 +10,13 @@ import (
 
 // Connect to the MQTT broker.
 func Connect(cfg *config.Config) (mqtt.Client, error) {
-	broker := cfg.MQTTBrokerHost
-	port := cfg.MQTTBrokerPort
+	broker := cfg.MQTT.BrokerHost
+	port := cfg.MQTT.BrokerPort
 	opts := mqtt.NewClientOptions()
 	opts.AddBroker(fmt.Sprintf("tcp://%s:%d", broker, port))
 	opts.SetClientID("hsd")
-	opts.SetUsername(cfg.MQTTUsername)
-	opts.SetPassword(cfg.MQTTPassword)
+	opts.SetUsername(cfg.MQTT.Username)
+	opts.SetPassword(cfg.MQTT.Password)
 	opts.SetConnectTimeout(10 * time.Second)
 
 	client := mqtt.NewClient(opts)
