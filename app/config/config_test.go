@@ -9,18 +9,15 @@ import (
 )
 
 func TestLoadEnv_Success(t *testing.T) {
-	t.Parallel()
+	// Set required environment variables
+	t.Setenv("PORT", "8080")
+	t.Setenv("MQTT_BROKER_HOST", "localhost")
+	t.Setenv("MQTT_USERNAME", "testuser")
+	t.Setenv("MQTT_PASSWORD", "testpass")
+	t.Setenv("TELEGRAM_BOT_TOKEN", "123456:ABC-DEF1234")
+	t.Setenv("TELEGRAM_CHAT_ID", "12345")
 
-	envMap := map[string]string{
-		"PORT":               "8080",
-		"MQTT_BROKER_HOST":   "localhost",
-		"MQTT_USERNAME":      "testuser",
-		"MQTT_PASSWORD":      "testpass",
-		"TELEGRAM_BOT_TOKEN": "123456:ABC-DEF1234",
-		"TELEGRAM_CHAT_ID":   "12345",
-	}
-
-	cfg, err := config.LoadFromEnvMap(envMap)
+	cfg, err := config.LoadEnv()
 
 	require.NoError(t, err)
 	assert.NotNil(t, cfg)
@@ -35,137 +32,124 @@ func TestLoadEnv_Success(t *testing.T) {
 }
 
 func TestLoadEnv_WithCustomMQTTPort(t *testing.T) {
-	t.Parallel()
+	// Set required environment variables with custom MQTT port
+	t.Setenv("PORT", "8080")
+	t.Setenv("MQTT_BROKER_HOST", "mqtt.example.com")
+	t.Setenv("MQTT_BROKER_PORT", "8883")
+	t.Setenv("MQTT_USERNAME", "testuser")
+	t.Setenv("MQTT_PASSWORD", "testpass")
+	t.Setenv("TELEGRAM_BOT_TOKEN", "123456:ABC-DEF1234")
+	t.Setenv("TELEGRAM_CHAT_ID", "12345")
 
-	envMap := map[string]string{
-		"PORT":               "8080",
-		"MQTT_BROKER_HOST":   "mqtt.example.com",
-		"MQTT_BROKER_PORT":   "8883",
-		"MQTT_USERNAME":      "testuser",
-		"MQTT_PASSWORD":      "testpass",
-		"TELEGRAM_BOT_TOKEN": "123456:ABC-DEF1234",
-		"TELEGRAM_CHAT_ID":   "12345",
-	}
-
-	cfg, err := config.LoadFromEnvMap(envMap)
+	cfg, err := config.LoadEnv()
 
 	require.NoError(t, err)
 	assert.Equal(t, 8883, cfg.MQTT.BrokerPort)
 }
 
 func TestLoadEnv_WithZ2MDevices(t *testing.T) {
-	t.Parallel()
+	// Set required environment variables with Z2M devices
+	t.Setenv("PORT", "8080")
+	t.Setenv("MQTT_BROKER_HOST", "localhost")
+	t.Setenv("MQTT_USERNAME", "testuser")
+	t.Setenv("MQTT_PASSWORD", "testpass")
+	t.Setenv("Z2M_DEVICES", "device1,device2,device3")
+	t.Setenv("TELEGRAM_BOT_TOKEN", "123456:ABC-DEF1234")
+	t.Setenv("TELEGRAM_CHAT_ID", "12345")
 
-	envMap := map[string]string{
-		"PORT":               "8080",
-		"MQTT_BROKER_HOST":   "localhost",
-		"MQTT_USERNAME":      "testuser",
-		"MQTT_PASSWORD":      "testpass",
-		"Z2M_DEVICES":        "device1,device2,device3",
-		"TELEGRAM_BOT_TOKEN": "123456:ABC-DEF1234",
-		"TELEGRAM_CHAT_ID":   "12345",
-	}
-
-	cfg, err := config.LoadFromEnvMap(envMap)
+	cfg, err := config.LoadEnv()
 
 	require.NoError(t, err)
 	assert.Equal(t, []string{"device1", "device2", "device3"}, cfg.Z2MDevices)
 }
 
+//nolint:paralleltest // Cannot use t.Parallel() with t.Setenv()
 func TestLoadEnv_MissingRequiredFields(t *testing.T) {
-	t.Parallel()
-
 	tests := []struct {
 		name        string
-		setupEnv    func() map[string]string
+		setupEnv    func(*testing.T)
 		expectError bool
 	}{
 		{
 			name: "missing PORT",
-			setupEnv: func() map[string]string {
-				return map[string]string{
-					"MQTT_BROKER_HOST":   "localhost",
-					"MQTT_USERNAME":      "testuser",
-					"MQTT_PASSWORD":      "testpass",
-					"TELEGRAM_BOT_TOKEN": "123456:ABC-DEF1234",
-					"TELEGRAM_CHAT_ID":   "12345",
-				}
+			setupEnv: func(t *testing.T) {
+				t.Helper()
+				t.Setenv("MQTT_BROKER_HOST", "localhost")
+				t.Setenv("MQTT_USERNAME", "testuser")
+				t.Setenv("MQTT_PASSWORD", "testpass")
+				t.Setenv("TELEGRAM_BOT_TOKEN", "123456:ABC-DEF1234")
+				t.Setenv("TELEGRAM_CHAT_ID", "12345")
 			},
 			expectError: true,
 		},
 		{
 			name: "missing MQTT_BROKER_HOST",
-			setupEnv: func() map[string]string {
-				return map[string]string{
-					"PORT":               "8080",
-					"MQTT_USERNAME":      "testuser",
-					"MQTT_PASSWORD":      "testpass",
-					"TELEGRAM_BOT_TOKEN": "123456:ABC-DEF1234",
-					"TELEGRAM_CHAT_ID":   "12345",
-				}
+			setupEnv: func(t *testing.T) {
+				t.Helper()
+				t.Setenv("PORT", "8080")
+				t.Setenv("MQTT_USERNAME", "testuser")
+				t.Setenv("MQTT_PASSWORD", "testpass")
+				t.Setenv("TELEGRAM_BOT_TOKEN", "123456:ABC-DEF1234")
+				t.Setenv("TELEGRAM_CHAT_ID", "12345")
 			},
 			expectError: true,
 		},
 		{
 			name: "missing MQTT_USERNAME",
-			setupEnv: func() map[string]string {
-				return map[string]string{
-					"PORT":               "8080",
-					"MQTT_BROKER_HOST":   "localhost",
-					"MQTT_PASSWORD":      "testpass",
-					"TELEGRAM_BOT_TOKEN": "123456:ABC-DEF1234",
-					"TELEGRAM_CHAT_ID":   "12345",
-				}
+			setupEnv: func(t *testing.T) {
+				t.Helper()
+				t.Setenv("PORT", "8080")
+				t.Setenv("MQTT_BROKER_HOST", "localhost")
+				t.Setenv("MQTT_PASSWORD", "testpass")
+				t.Setenv("TELEGRAM_BOT_TOKEN", "123456:ABC-DEF1234")
+				t.Setenv("TELEGRAM_CHAT_ID", "12345")
 			},
 			expectError: true,
 		},
 		{
 			name: "missing MQTT_PASSWORD",
-			setupEnv: func() map[string]string {
-				return map[string]string{
-					"PORT":               "8080",
-					"MQTT_BROKER_HOST":   "localhost",
-					"MQTT_USERNAME":      "testuser",
-					"TELEGRAM_BOT_TOKEN": "123456:ABC-DEF1234",
-					"TELEGRAM_CHAT_ID":   "12345",
-				}
+			setupEnv: func(t *testing.T) {
+				t.Helper()
+				t.Setenv("PORT", "8080")
+				t.Setenv("MQTT_BROKER_HOST", "localhost")
+				t.Setenv("MQTT_USERNAME", "testuser")
+				t.Setenv("TELEGRAM_BOT_TOKEN", "123456:ABC-DEF1234")
+				t.Setenv("TELEGRAM_CHAT_ID", "12345")
 			},
 			expectError: true,
 		},
 		{
 			name: "missing TELEGRAM_BOT_TOKEN",
-			setupEnv: func() map[string]string {
-				return map[string]string{
-					"PORT":             "8080",
-					"MQTT_BROKER_HOST": "localhost",
-					"MQTT_USERNAME":    "testuser",
-					"MQTT_PASSWORD":    "testpass",
-					"TELEGRAM_CHAT_ID": "12345",
-				}
+			setupEnv: func(t *testing.T) {
+				t.Helper()
+				t.Setenv("PORT", "8080")
+				t.Setenv("MQTT_BROKER_HOST", "localhost")
+				t.Setenv("MQTT_USERNAME", "testuser")
+				t.Setenv("MQTT_PASSWORD", "testpass")
+				t.Setenv("TELEGRAM_CHAT_ID", "12345")
 			},
 			expectError: true,
 		},
 		{
 			name: "missing TELEGRAM_CHAT_ID",
-			setupEnv: func() map[string]string {
-				return map[string]string{
-					"PORT":               "8080",
-					"MQTT_BROKER_HOST":   "localhost",
-					"MQTT_USERNAME":      "testuser",
-					"MQTT_PASSWORD":      "testpass",
-					"TELEGRAM_BOT_TOKEN": "123456:ABC-DEF1234",
-				}
+			setupEnv: func(t *testing.T) {
+				t.Helper()
+				t.Setenv("PORT", "8080")
+				t.Setenv("MQTT_BROKER_HOST", "localhost")
+				t.Setenv("MQTT_USERNAME", "testuser")
+				t.Setenv("MQTT_PASSWORD", "testpass")
+				t.Setenv("TELEGRAM_BOT_TOKEN", "123456:ABC-DEF1234")
 			},
 			expectError: true,
 		},
 	}
 
 	for _, tt := range tests {
+		//nolint:paralleltest // Cannot use t.Parallel() with t.Setenv()
 		t.Run(tt.name, func(t *testing.T) {
-			t.Parallel()
+			tt.setupEnv(t)
 
-			envMap := tt.setupEnv()
-			cfg, err := config.LoadFromEnvMap(envMap)
+			cfg, err := config.LoadEnv()
 
 			if tt.expectError {
 				require.Error(t, err)
@@ -179,36 +163,30 @@ func TestLoadEnv_MissingRequiredFields(t *testing.T) {
 }
 
 func TestLoadEnv_InvalidPortValue(t *testing.T) {
-	t.Parallel()
+	// Set environment variables with invalid PORT value
+	t.Setenv("PORT", "invalid")
+	t.Setenv("MQTT_BROKER_HOST", "localhost")
+	t.Setenv("MQTT_USERNAME", "testuser")
+	t.Setenv("MQTT_PASSWORD", "testpass")
+	t.Setenv("TELEGRAM_BOT_TOKEN", "123456:ABC-DEF1234")
+	t.Setenv("TELEGRAM_CHAT_ID", "12345")
 
-	envMap := map[string]string{
-		"PORT":               "invalid",
-		"MQTT_BROKER_HOST":   "localhost",
-		"MQTT_USERNAME":      "testuser",
-		"MQTT_PASSWORD":      "testpass",
-		"TELEGRAM_BOT_TOKEN": "123456:ABC-DEF1234",
-		"TELEGRAM_CHAT_ID":   "12345",
-	}
-
-	cfg, err := config.LoadFromEnvMap(envMap)
+	cfg, err := config.LoadEnv()
 
 	require.Error(t, err)
 	assert.Nil(t, cfg)
 }
 
 func TestLoadEnv_InvalidChatIDValue(t *testing.T) {
-	t.Parallel()
+	// Set environment variables with invalid TELEGRAM_CHAT_ID value
+	t.Setenv("PORT", "8080")
+	t.Setenv("MQTT_BROKER_HOST", "localhost")
+	t.Setenv("MQTT_USERNAME", "testuser")
+	t.Setenv("MQTT_PASSWORD", "testpass")
+	t.Setenv("TELEGRAM_BOT_TOKEN", "123456:ABC-DEF1234")
+	t.Setenv("TELEGRAM_CHAT_ID", "invalid")
 
-	envMap := map[string]string{
-		"PORT":               "8080",
-		"MQTT_BROKER_HOST":   "localhost",
-		"MQTT_USERNAME":      "testuser",
-		"MQTT_PASSWORD":      "testpass",
-		"TELEGRAM_BOT_TOKEN": "123456:ABC-DEF1234",
-		"TELEGRAM_CHAT_ID":   "invalid",
-	}
-
-	cfg, err := config.LoadFromEnvMap(envMap)
+	cfg, err := config.LoadEnv()
 
 	require.Error(t, err)
 	assert.Nil(t, cfg)

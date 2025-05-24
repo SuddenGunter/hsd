@@ -40,18 +40,3 @@ func LoadEnv() (*Config, error) {
 
 	return &cfg, nil
 }
-
-// LoadFromEnvMap loads the configuration from the provided environment map.
-// This function is useful for testing as it doesn't rely on global environment state.
-func LoadFromEnvMap(envMap map[string]string) (*Config, error) {
-	cfg := Config{}
-
-	err := env.ParseWithOptions(&cfg, env.Options{
-		Environment: envMap,
-	})
-	if err != nil {
-		return nil, fmt.Errorf("env: %w", err)
-	}
-
-	return &cfg, nil
-}
