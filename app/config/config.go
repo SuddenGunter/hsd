@@ -10,15 +10,23 @@ import (
 type Config struct {
 	Port int `env:"PORT,required"`
 
-	MQTTBrokerHost string `env:"MQTT_BROKER_HOST,required"`
-	MQTTBrokerPort int    `env:"MQTT_BROKER_PORT" envDefault:"1883"`
-	MQTTUsername   string `env:"MQTT_USERNAME,required"`
-	MQTTPassword   string `env:"MQTT_PASSWORD,required"`
+	MQTT mqttConfig `envPrefix:"MQTT_"`
 
 	Z2MDevices []string `env:"Z2M_DEVICES"`
 
-	TelegramBotToken string `env:"TELEGRAM_BOT_TOKEN,required"`
-	TelegramChatID   int64  `env:"TELEGRAM_CHAT_ID,required"`
+	Telegram telegramConfig `envPrefix:"TELEGRAM_"`
+}
+
+type mqttConfig struct {
+	BrokerHost string `env:"BROKER_HOST,required"`
+	BrokerPort int    `env:"BROKER_PORT" envDefault:"1883"`
+	Username   string `env:"USERNAME,required"`
+	Password   string `env:"PASSWORD,required"`
+}
+
+type telegramConfig struct {
+	BotToken string `env:"BOT_TOKEN,required"`
+	ChatID   int64  `env:"CHAT_ID,required"`
 }
 
 // LoadEnv loads the configuration from the environment.

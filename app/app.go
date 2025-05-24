@@ -32,7 +32,7 @@ func New(l *slog.Logger, cfg *config.Config) *App {
 
 // Run starts the app and blocks until shutdown.
 func (app *App) Run(sigCtx context.Context) {
-	notifier, err := telegram.NewNotifier(app.cfg.TelegramBotToken, app.cfg.TelegramChatID, app.l)
+	notifier, err := telegram.NewNotifier(app.cfg.Telegram.BotToken, app.cfg.Telegram.ChatID, app.l)
 	if err != nil {
 		app.l.Error("failed to create telegram notifier", "err", err)
 		return
