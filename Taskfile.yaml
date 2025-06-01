@@ -19,3 +19,6 @@ tasks:
       - go build -o ./appx
       # verbose logging would no be ideal for prod deployment, but it's useful for local development
       - ./appx -v
+  lint:
+    cmds:
+      - golangci-lint run

@@ -29,7 +29,6 @@ func NewNotifier(tgBotToken string, chatID int64, l *slog.Logger) (*Notifier, er
 func (n *Notifier) Notify(device, msg string) {
 	payload := fmt.Sprintf("🚨 %s: %s", device, msg)
 	tgMsg := tgbotapi.NewMessage(n.chatID, payload)
-	tgMsg.ParseMode = tgbotapi.ModeMarkdownV2
 
 	_, err := n.bot.Send(tgMsg)
 	if err != nil {
