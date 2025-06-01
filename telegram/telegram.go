@@ -5,6 +5,7 @@ import (
 	"log/slog"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+	"github.com/hashicorp/go-retryablehttp"
 )
 
 // Notifier sends messages to a telegram chat.
@@ -17,7 +18,10 @@ type Notifier struct {
 
 // NewNotifier returns a new Notifier.
 func NewNotifier(tgBotToken string, chatID int64, l *slog.Logger) (*Notifier, error) {
-	bot, err := tgbotapi.NewBotAPI(tgBotToken)
+	retryClient := retryablehttp.NewClient()
+	retryClient.RetryMax = 3
+
+	bot, err := tgbotapi.NewBotAPIWithClient(tgBotToken, tgbotapi.APIEndpoint, retryClient.StandardClient())
 	if err != nil {
 		return nil, fmt.Errorf("new notifier: %w", err)
 	}
