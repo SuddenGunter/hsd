@@ -3,7 +3,7 @@ module github.com/SuddenGunter/hsd
 go 1.24.2
 
 require (
-	github.com/caarlos0/env/v11 v11.3.1
+	github.com/caarlos0/env/v11 v11.4.0
 	github.com/eclipse/paho.mqtt.golang v1.5.0
 	github.com/go-telegram-bot-api/telegram-bot-api/v5 v5.5.1
 	github.com/hashicorp/go-retryablehttp v0.7.7
