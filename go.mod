@@ -1,6 +1,6 @@
 module github.com/SuddenGunter/hsd
 
-go 1.24.2
+go 1.25.0
 
 require (
 	github.com/caarlos0/env/v11 v11.3.1
@@ -15,7 +15,7 @@ require (
 	github.com/gorilla/websocket v1.5.3 // indirect
 	github.com/hashicorp/go-cleanhttp v0.5.2 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
-	golang.org/x/net v0.44.0 // indirect
+	golang.org/x/net v0.55.0 // indirect
 	golang.org/x/sync v0.17.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
